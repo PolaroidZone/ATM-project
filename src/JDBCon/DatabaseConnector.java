@@ -33,10 +33,10 @@ public class DatabaseConnector {
         }
     }
 
-    public static boolean createUser(String userId, int pin) {
+    public static boolean createUser(int userId, int pin) {
         String query = "INSERT INTO users (userId, pin) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, userId);
+            statement.setInt(1, userId);
             statement.setInt(2, pin);
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful user creation
@@ -47,10 +47,10 @@ public class DatabaseConnector {
         }
     }
 
-    public static boolean validateUser(String userId, int pin) {
+    public static boolean validateUser(int userId, int pin) {
         String query = "SELECT * FROM users WHERE userId = ? AND pin = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, userId);
+            statement.setInt(1, userId);
             statement.setInt(2, pin);
             ResultSet resultSet = statement.executeQuery();
             return resultSet.next(); // Returns true if the user exists, false otherwise
@@ -62,11 +62,11 @@ public class DatabaseConnector {
     }
 
 
-    public static boolean createBankAccount(String accountId, String userId, double balance) {
+    public static boolean createBankAccount(int accountId, int userId, double balance) {
         String query = "INSERT INTO bank_accounts (accountId, userId, balance) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, accountId);
-            statement.setString(2, userId);
+            statement.setInt(1, accountId);
+            statement.setInt(2, userId);
             statement.setDouble(3, balance);
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful account creation
@@ -77,10 +77,10 @@ public class DatabaseConnector {
         }
     }
 
-    public static double getBankStatement(String accountId) {
+    public static double getBankStatement(int accountId) {
         String query = "SELECT balance FROM bank_accounts WHERE accountId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, accountId);
+            statement.setInt(1, accountId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getDouble("balance");
@@ -92,11 +92,11 @@ public class DatabaseConnector {
         return 0.0; // Return 0.0 if the account or balance is not found
     }
 
-    public static boolean depositFunds(String accountId, double amount) {
+    public static boolean depositFunds(int accountId, double amount) {
         String query = "UPDATE bank_accounts SET balance = balance + ? WHERE accountId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDouble(1, amount);
-            statement.setString(2, accountId);
+            statement.setInt(2, accountId);
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful deposit
         } catch (SQLException e) {
@@ -106,11 +106,11 @@ public class DatabaseConnector {
         }
     }
 
-    public static boolean withdrawFunds(String accountId, double amount) {
+    public static boolean withdrawFunds(int accountId, double amount) {
         String query = "UPDATE bank_accounts SET balance = balance - ? WHERE accountId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDouble(1, amount);
-            statement.setString(2, accountId);
+            statement.setInt(2, accountId);
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful withdrawal
         } catch (SQLException e) {

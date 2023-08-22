@@ -21,8 +21,8 @@ public class BankStatement {
             return 0.0;
         }  else {
             String accountId = currentAccount.getUserId();
-            System.out.println("Statement: " + DatabaseConnector.getBankStatement(accountId));
-            return DatabaseConnector.getBankStatement(accountId);
+            System.out.println("Statement: " + DatabaseConnector.getBankStatement(Integer.parseInt(accountId)));
+            return DatabaseConnector.getBankStatement(Integer.parseInt(accountId));
         }
         // Display the statement or perform any other necessary actions
     }

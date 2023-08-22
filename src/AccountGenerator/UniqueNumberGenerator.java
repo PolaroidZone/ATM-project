@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class UniqueNumberGenerator {
-    private static Set<Integer> generatedNumbers = new HashSet<>();
+    private static final Set<Integer> generatedNumbers = new HashSet<>();
     private static final int NUM_DIGITS = 8;
 
     public static int generateUniqueNumber() {

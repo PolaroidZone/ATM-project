@@ -19,7 +19,7 @@ public class Withdraw {
             return "This service is not available at the moment please try again later";
         }else {
             String accountId = currentAccount.getUserId();
-            if (DatabaseConnector.withdrawFunds(accountId, amount)) {
+            if (DatabaseConnector.withdrawFunds(Integer.parseInt(accountId), amount)) {
                 System.out.println("Successfully withdrew funds: " + amount);
                 return "Successfully withdrew funds: " + amount;
             } else {
