@@ -25,6 +25,7 @@ public class LoginForm extends JFrame implements ActionListener {
         setResizable(true);
         /* increase the dimensions */
         setSize(500,500);
+        setLocationRelativeTo(null);
 
         proceedButton.addActionListener(this);
         End.addActionListener(this);
