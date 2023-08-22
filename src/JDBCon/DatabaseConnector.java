@@ -77,10 +77,10 @@ public class DatabaseConnector {
         }
     }
 
-    public static double getBankStatement(int accountId) {
-        String query = "SELECT balance FROM bank_accounts WHERE accountId = ?";
+    public static double getBankStatement(int userId) {
+        String query = "SELECT balance FROM bank_accounts WHERE userId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, accountId);
+            statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getDouble("balance");
@@ -115,6 +115,19 @@ public class DatabaseConnector {
             return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful withdrawal
         } catch (SQLException e) {
             System.out.println("Error withdrawing funds.");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean checkBankAccount(int userId) {
+        String query = "SELECT * FROM bank_accounts WHERE userId = ?";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next(); // Returns true if the account exists, false otherwise
+        } catch (SQLException e) {
+            System.out.println("Error validating account.");
             e.printStackTrace();
             return false;
         }

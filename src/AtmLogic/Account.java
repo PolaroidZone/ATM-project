@@ -11,8 +11,8 @@ public class Account {
         this.pin = pin;
     }
 
-// Other methods related to account functionality can be added here
-// such as methods for deposit, withdrawal, balance inquiry, etc.
+    public Account() {
+    }
 
     // Getters and Setters
     public String getUserId() {
