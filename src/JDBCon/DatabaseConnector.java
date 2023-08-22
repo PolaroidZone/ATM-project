@@ -3,9 +3,9 @@ package JDBCon;
 import java.sql.*;
 
 public class DatabaseConnector {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/mydatabase";
-    private static final String USERNAME = "your_username";
-    private static final String PASSWORD = "your_password";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/cse_atm";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "";
 
     private static Connection connection;
 
@@ -59,22 +59,6 @@ public class DatabaseConnector {
             e.printStackTrace();
             return false;
         }
-    }
-
-
-    public static boolean createBankAccount(String accountNumber, String userId) {
-        String query = "INSERT INTO bank_accounts (accountNumber, userId) VALUES (?, ?)";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, accountNumber);
-            statement.setString(2, userId);
-            int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful bank account creation
-        } catch (SQLException e) {
-            System.out.println("Error creating bank account.");
-            e.printStackTrace();
-            return false;
-        }
-
     }
 
 

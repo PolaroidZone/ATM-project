@@ -1,30 +1,45 @@
 package AtmLogic;
 
-import JDBCon.DatabaseConnector;
+
+import static JDBCon.DatabaseConnector.*;
 
 ///the Atm session consists of the session creation which is the login and the session termination which is the logout
 public class AtmSession {
     private boolean loggedIn;
     private Account currentAccount;
-    private DatabaseConnector database;
     public AtmSession() {
         loggedIn = false;
         currentAccount = null;
     }
 
     public boolean login(String userId, int pin) {
+
+        getConnection();
+
         // Check if the user is already logged in
-        if (loggedIn) {
-            System.out.println("User is already logged in. Please logout first.");
-            return false;
-        }else if (DatabaseConnector.getConnection() == null){
+        if (getConnection() == null) {
             System.out.println("There is no database connection.");
             return false;
-        } else {
-            currentAccount = new Account(userId, pin);
-            loggedIn = true;
-            System.out.println("Login successful.");
+        }else if (loggedIn){
+            System.out.println("User is already logged in. Please logout first.");
             return true;
+        } else {
+            try {
+                if (validateUser(userId, pin)) {
+                    loggedIn = true;
+                    currentAccount = new Account(userId, pin);
+                    System.out.println("Login successful.");
+                    return true;
+                } else {
+                    System.out.println("Invalid user credentials.");
+                    closeConnection();
+                    return false;
+                }
+            } catch (Exception e) {
+                System.out.println("Error validating user." + e);
+                closeConnection();
+                return false;
+            }
         }
 
         // TODO: Implement logic to verify the user's credentials
@@ -40,7 +55,7 @@ public class AtmSession {
             loggedIn = false;
             currentAccount = null;
             System.out.println("Logout successful.");
-            DatabaseConnector.closeConnection();
+            closeConnection();
         } else {
             System.out.println("No user is currently logged in.");
         }
