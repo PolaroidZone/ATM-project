@@ -25,7 +25,7 @@ public class AtmSession {
             return true;
         } else {
             try {
-                if (validateUser(userId, pin)) {
+                if (validateUser(Integer.parseInt(userId), pin)) {
                     loggedIn = true;
                     currentAccount = new Account(userId, pin);
                     System.out.println("Login successful.");

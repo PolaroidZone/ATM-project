@@ -29,6 +29,7 @@ public class TransactionForm extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(true);
+        setLocationRelativeTo(null);
         /* increase the dimensions */
         setSize(500,500);
 
@@ -65,7 +66,7 @@ public class TransactionForm extends JFrame implements ActionListener {
         //Get database connection
         getConnection();
         //Check if the user exists
-        Boolean isExists = DatabaseConnector.validateUser(String.valueOf(cardNumber), Integer.parseInt(String.valueOf(pinNumber)));
+        Boolean isExists = DatabaseConnector.validateUser(Integer.parseInt(String.valueOf(cardNumber)), Integer.parseInt(String.valueOf(pinNumber)));
 
         if (!isExists){
             JOptionPane.showMessageDialog(null, "Invalid card number or pin");

@@ -19,7 +19,7 @@ public class Deposit {
             return "This service is currently unavailable please try again later";
         }else {
             String accountId  = currentAccount.getUserId();
-            if (DatabaseConnector.depositFunds(accountId, amount)){
+            if (DatabaseConnector.depositFunds(Integer.parseInt(accountId), amount)){
                 System.out.println("Successfully deposited funds: " + amount);
                 return "Successfully deposited funds: " + amount;
             }else {

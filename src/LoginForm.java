@@ -1,5 +1,4 @@
 import AtmLogic.AtmSession;
-import JDBCon.DatabaseConnector;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -14,6 +13,7 @@ public class LoginForm extends JFrame implements ActionListener {
     private JPasswordField pin;
     private JButton proceedButton;
     private JButton End;
+    private JButton newUserButton;
 
     AtmSession atmSession = new AtmSession();
 
@@ -28,6 +28,7 @@ public class LoginForm extends JFrame implements ActionListener {
 
         proceedButton.addActionListener(this);
         End.addActionListener(this);
+        newUserButton.addActionListener(this);
 
     }
 
@@ -47,6 +48,11 @@ public class LoginForm extends JFrame implements ActionListener {
             }
         } else if (e.getSource() == End){
             System.exit(0);
+        } else if (e.getSource() == newUserButton) {
+            CreateUser createUser = new CreateUser();
+            createUser.setVisible(true);
+            createUser.setLocationRelativeTo(null);
+            dispose();
         }
     }
 
