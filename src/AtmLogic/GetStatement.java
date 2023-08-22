@@ -3,16 +3,15 @@ package AtmLogic;
 import JDBCon.DatabaseConnector;
 
 //This class contains a method that gets the users account bank statement
-public class BankStatement {
+public class GetStatement {
     private Account account;
-    private AtmSession session;
+    private static AtmSession session;
 
-    private DatabaseConnector databaseConnector;
-    public BankStatement(Account account) {
+    public GetStatement(Account account) {
         this.account = account;
     }
 
-    public Double getStatement() {
+    public static Double getStatement() {
         // TODO: Implement logic to retrieve the user's bank statement
         // For example, fetch transaction history or account details from a database
         Account currentAccount = session.getCurrentAccount();

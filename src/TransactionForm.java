@@ -57,7 +57,7 @@ public class TransactionForm extends JFrame implements ActionListener {
         } else if (e.getSource() == changePinButton) {
 
         } else if (e.getSource() == cancelButton) {
-
+            new LoginForm();
         }
     }
 
@@ -66,13 +66,12 @@ public class TransactionForm extends JFrame implements ActionListener {
         //Get database connection
         getConnection();
         //Check if the user exists
-        Boolean isExists = DatabaseConnector.validateUser(Integer.parseInt(String.valueOf(cardNumber)), Integer.parseInt(String.valueOf(pinNumber)));
+        Boolean isExist = DatabaseConnector.validateUser(Integer.parseInt(String.valueOf(cardNumber)), Integer.parseInt(String.valueOf(pinNumber)));
 
-        if (!isExists){
+        if (!isExist){
             JOptionPane.showMessageDialog(null, "Invalid card number or pin");
         }else{
             //Open the transaction form
-            //Close the login form
             dispose();
         }
     }
