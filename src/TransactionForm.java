@@ -1,3 +1,5 @@
+import AtmLogic.Account;
+import AtmLogic.AtmSession;
 import JDBCon.DatabaseConnector;
 
 import javax.swing.*;
@@ -18,12 +20,8 @@ public class TransactionForm extends JFrame implements ActionListener {
     private JButton printBankStatementButton;
     private JButton changePinButton;
     private JButton cancelButton;
-
-    private final String cardNumber;
-
-    private final String pinNumber;
-
-    public TransactionForm (String cardNumber, String pinNumber){
+    Account account = new Account();
+    public TransactionForm (String accountNumber){
         setContentPane(content);
         pack();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,6 +31,8 @@ public class TransactionForm extends JFrame implements ActionListener {
         /* increase the dimensions */
         setSize(500,500);
 
+        account.setUserId(accountNumber);
+
         withdrawFundsButton.addActionListener(this);
         depositeFundsButton.addActionListener(this);
         checkBalanceButton.addActionListener(this);
@@ -40,16 +40,15 @@ public class TransactionForm extends JFrame implements ActionListener {
         changePinButton.addActionListener(this);
         cancelButton.addActionListener(this);
 
-        this.cardNumber = cardNumber;
-        this.pinNumber = pinNumber;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        String uid = account.getUserId();
         if (e.getSource() == withdrawFundsButton){
-            withdrawFunds(Integer.parseInt(cardNumber), Integer.parseInt(pinNumber));
+            new WithdrawFunds(uid);
         }else if (e.getSource() == depositeFundsButton){
-
+            new DepositeFunds(uid);
         } else if (e.getSource() == checkBalanceButton) {
 
         } else if (e.getSource() == printBankStatementButton) {
@@ -58,30 +57,8 @@ public class TransactionForm extends JFrame implements ActionListener {
 
         } else if (e.getSource() == cancelButton) {
             new LoginForm();
-        }
-    }
-
-    private void withdrawFunds(int cardNumber, int pinNumber) {
-        //Check if the user is a database user
-        //Get database connection
-        getConnection();
-        //Check if the user exists
-        Boolean isExist = DatabaseConnector.validateUser(Integer.parseInt(String.valueOf(cardNumber)), Integer.parseInt(String.valueOf(pinNumber)));
-
-        if (!isExist){
-            JOptionPane.showMessageDialog(null, "Invalid card number or pin");
-        }else{
-            //Open the transaction form
             dispose();
         }
     }
 
-    //Setting the credentials
-    private String getCardNumber () {
-        return cardNumber;
-    }
-
-    public String getPinNumber() {
-        return pinNumber;
-    }
 }

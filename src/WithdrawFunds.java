@@ -1,3 +1,4 @@
+import AtmLogic.Account;
 import AtmLogic.AtmSession;
 import AtmLogic.GetStatement;
 
@@ -29,7 +30,8 @@ public class WithdrawFunds extends JFrame implements ActionListener {
     private JButton a0Button;
     private JButton correctButton;
 
-    public WithdrawFunds() {
+
+    public WithdrawFunds(String accountNumber) {
         super("Withdraw Funds");
         setContentPane(content);
         pack();
@@ -43,19 +45,18 @@ public class WithdrawFunds extends JFrame implements ActionListener {
         radioGroup.add(a50RadioButton);
 
         //get session
-        AtmSession session = new AtmSession();
-        String backAccount = String.valueOf(session.getCurrentAccount());
 
         balamce.setEditable(false);
         customvalue.setEditable(false);
 
+        getBalance(accountNumber);
         withdrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = getRadioAmount();
                 System.out.println("Selected amount: $" + amount);
 
-                handleWithdraw(Integer.parseInt(backAccount), amount);
+                handleWithdraw(Integer.parseInt(accountNumber), amount);
             }
         });
         
@@ -64,7 +65,7 @@ public class WithdrawFunds extends JFrame implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 double amount = Integer.parseInt(customvalue.getText());
                 System.out.print(amount);
-                handleWithdraw(Integer.parseInt(backAccount), amount);
+                handleWithdraw(Integer.parseInt(accountNumber), amount);
             }
         });
 
@@ -128,7 +129,7 @@ public class WithdrawFunds extends JFrame implements ActionListener {
     }
 
     private void handleWithdraw(int account, double amount) {
-        double balance = GetStatement.getStatement();
+        double balance = GetStatement.getStatement(String.valueOf(account));
         if (amount > balance) {
             JOptionPane.showMessageDialog(this, "Insufficient funds");
         } else {
@@ -143,6 +144,11 @@ public class WithdrawFunds extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(this, "Error withdrawing funds");
             }
         }
+    }
+
+    protected void getBalance(String accountNumber) {
+        double balance = GetStatement.getStatement(accountNumber);
+        balamce.setText(String.valueOf(balance));
     }
 
 }
