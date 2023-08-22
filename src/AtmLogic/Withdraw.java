@@ -2,6 +2,8 @@ package AtmLogic;
 
 import JDBCon.DatabaseConnector;
 
+import static JDBCon.DatabaseConnector.getConnection;
+
 public class Withdraw {
     protected Account account;
     protected AtmSession session;
@@ -14,7 +16,7 @@ public class Withdraw {
         // For example, deduct the withdrawn amount from the account balance
         Account currentAccount = session.getCurrentAccount();
 
-        if (DatabaseConnector.getConnection() == null){
+        if (getConnection() == null){
             System.out.println("There is no database connection available");
             return "This service is not available at the moment please try again later";
         }else {

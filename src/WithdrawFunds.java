@@ -1,6 +1,11 @@
+import AtmLogic.AtmSession;
+import AtmLogic.GetStatement;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static JDBCon.DatabaseConnector.withdrawFunds;
 
 public class WithdrawFunds extends JFrame implements ActionListener {
     private JPanel panel1;
@@ -37,24 +42,29 @@ public class WithdrawFunds extends JFrame implements ActionListener {
         radioGroup.add(a100RadioButton);
         radioGroup.add(a50RadioButton);
 
+        //get session
+        AtmSession session = new AtmSession();
+        String backAccount = String.valueOf(session.getCurrentAccount());
+
         balamce.setEditable(false);
         customvalue.setEditable(false);
 
         withdrawButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int amount = getRadioAmount();
+                double amount = getRadioAmount();
                 System.out.println("Selected amount: $" + amount);
-                handleWithdraw();
+
+                handleWithdraw(Integer.parseInt(backAccount), amount);
             }
         });
         
         proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int amount = Integer.parseInt(customvalue.getText());
+                double amount = Integer.parseInt(customvalue.getText());
                 System.out.print(amount);
-                handleWithdraw();
+                handleWithdraw(Integer.parseInt(backAccount), amount);
             }
         });
 
@@ -117,8 +127,22 @@ public class WithdrawFunds extends JFrame implements ActionListener {
         return amount;
     }
 
-
-    private void handleWithdraw() {
+    private void handleWithdraw(int account, double amount) {
+        double balance = GetStatement.getStatement();
+        if (amount > balance) {
+            JOptionPane.showMessageDialog(this, "Insufficient funds");
+        } else {
+            boolean results = withdrawFunds(account ,amount);
+            if (results) {
+                JOptionPane.showMessageDialog(this, "Successfully withdrew funds: $" + amount);
+                LoginForm loginForm = new LoginForm();
+                loginForm.setVisible(true);
+                loginForm.setLocationRelativeTo(null);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error withdrawing funds");
+            }
+        }
     }
 
 }
