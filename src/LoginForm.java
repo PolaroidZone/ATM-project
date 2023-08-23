@@ -59,17 +59,20 @@ public class LoginForm extends JFrame implements ActionListener {
 
     private void login(String accountNumber, String pinNumber) {
         //Check if the user exists
-        boolean isExists = atmSession.login(accountNumber, Integer.parseInt(pinNumber));
+        try {
+            boolean isExists = atmSession.login(accountNumber, Integer.parseInt(pinNumber));
 
-        if (!isExists){
+            if (!isExists){
+                JOptionPane.showMessageDialog(null, "Invalid card number or pin");
+            }else{
+                //Open the next window
+                new TransactionForm(accountNumber);
+                dispose();
+            }
+        } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Invalid card number or pin");
-        }else{
-            //Open the next window
-            new TransactionForm(accountNumber);
-            dispose();
         }
 
     }
-
 
 }

@@ -1,6 +1,7 @@
 import AtmLogic.Account;
 import AtmLogic.AtmSession;
 import AtmLogic.GetStatement;
+import AtmLogic.Withdraw;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -30,6 +31,8 @@ public class WithdrawFunds extends JFrame implements ActionListener {
     private JButton a0Button;
     private JButton correctButton;
 
+    Withdraw withdraw = new Withdraw();
+
 
     public WithdrawFunds(String accountNumber) {
         super("Withdraw Funds");
@@ -54,18 +57,33 @@ public class WithdrawFunds extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 double amount = getRadioAmount();
-                System.out.println("Selected amount: $" + amount);
 
-                handleWithdraw(Integer.parseInt(accountNumber), amount);
+                if (amount <= 0.0) {
+                    JOptionPane.showMessageDialog(null, "Please select a valid amount");
+                } else {
+                    System.out.println("Selected amount: $" + amount);
+
+                    handleWithdraw(Integer.parseInt(accountNumber), amount);
+                }
+
             }
         });
         
         proceedButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                double amount = Integer.parseInt(customvalue.getText());
-                System.out.print(amount);
-                handleWithdraw(Integer.parseInt(accountNumber), amount);
+                try {
+                    double amount = Integer.parseInt(customvalue.getText());
+                    if (amount <= 0.0) {
+                        JOptionPane.showMessageDialog(null, "Please select a valid amount");
+                    } else {
+                        System.out.println("Selected amount: $" + amount);
+
+                        handleWithdraw(Integer.parseInt(accountNumber), amount);
+                    }
+                } catch (NumberFormatException exception) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid amount");
+                }
             }
         });
 
@@ -133,22 +151,40 @@ public class WithdrawFunds extends JFrame implements ActionListener {
         if (amount > balance) {
             JOptionPane.showMessageDialog(this, "Insufficient funds");
         } else {
-            boolean results = withdrawFunds(account ,amount);
+            boolean results = withdraw.withdrawFunds(String.valueOf(account), amount);
             if (results) {
                 JOptionPane.showMessageDialog(this, "Successfully withdrew funds: $" + amount);
-                LoginForm loginForm = new LoginForm();
-                loginForm.setVisible(true);
-                loginForm.setLocationRelativeTo(null);
-                dispose();
+                handleOnComplete();
             } else {
-                JOptionPane.showMessageDialog(this, "Error withdrawing funds");
+                JOptionPane.showMessageDialog(this, "Our service is currently unavailable please try again later");
+                handleOnComplete();
             }
         }
     }
 
     protected void getBalance(String accountNumber) {
         double balance = GetStatement.getStatement(accountNumber);
-        balamce.setText(String.valueOf(balance));
+        String finalBalance = convertScientificToDecimal(balance);
+        balamce.setText(finalBalance);
+    }
+    public static String convertScientificToDecimal(double scientificNumber) {
+        // Convert the scientific notation to a full decimal string
+        String decimalString = String.format("%.10f", scientificNumber);
+
+        // Remove trailing zeros
+        decimalString = decimalString.replaceAll("0*$", "");
+
+        // Remove decimal point if there are no decimal places left
+        decimalString = decimalString.replaceAll("\\.$", "");
+
+        return decimalString;
+    }
+
+    private void handleOnComplete() {
+        LoginForm loginForm = new LoginForm();
+        loginForm.setVisible(true);
+        loginForm.setLocationRelativeTo(null);
+        dispose();
     }
 
 }

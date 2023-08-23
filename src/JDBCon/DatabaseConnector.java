@@ -106,11 +106,11 @@ public class DatabaseConnector {
         }
     }
 
-    public static boolean withdrawFunds(int accountId, double amount) {
-        String query = "UPDATE bank_accounts SET balance = balance - ? WHERE accountId = ?";
+    public static boolean withdrawFunds(int userId, double amount) {
+        String query = "UPDATE bank_accounts SET balance = balance - ? WHERE userId = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setDouble(1, amount);
-            statement.setInt(2, accountId);
+            statement.setInt(2, userId);
             int rowsAffected = statement.executeUpdate();
             return rowsAffected > 0; // Returns true if at least one row was affected, indicating successful withdrawal
         } catch (SQLException e) {

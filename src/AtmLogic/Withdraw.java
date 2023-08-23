@@ -2,6 +2,7 @@ package AtmLogic;
 
 import JDBCon.DatabaseConnector;
 
+import static JDBCon.DatabaseConnector.closeConnection;
 import static JDBCon.DatabaseConnector.getConnection;
 
 public class Withdraw {
@@ -10,21 +11,23 @@ public class Withdraw {
     public Withdraw() {
     }
 
-    public String withdrawFunds(double amount) {
+    public boolean withdrawFunds(String accountId,double amount) {
+        getConnection();
         // TODO: Implement logic to withdraw funds from the account
         // For example, deduct the withdrawn amount from the account balance
-        String accountId = account.getUserId();
 
         if (getConnection() == null){
             System.out.println("There is no database connection available");
-            return "This service is not available at the moment please try again later";
+            return false;
         }else {
             if (DatabaseConnector.withdrawFunds(Integer.parseInt(accountId), amount)) {
                 System.out.println("Successfully withdrew funds: " + amount);
-                return "Successfully withdrew funds: " + amount;
+                closeConnection();
+                return true;
             } else {
                 System.out.println("Error withdrawing funds");
-                return "Cant withdrawing funds at the moment try later";
+                closeConnection();
+                return false;
             }
         }
     }

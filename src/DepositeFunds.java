@@ -42,9 +42,21 @@ public class DepositeFunds extends JFrame implements ActionListener {
         depositButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Deposit deposit = new Deposit();
-                String isDeposit = deposit.depositFunds(accountNumber, Double.parseDouble(textField1.getText()));
-                JOptionPane.showMessageDialog(null, isDeposit);
+                double amount = Double.parseDouble(textField1.getText());
+                if (amount <= 0.0) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid amount");
+                    textField1.setText("");
+                } else {
+                    Deposit deposit = new Deposit();
+                    boolean isDeposit = deposit.depositFunds(accountNumber, amount);
+                    if (isDeposit) {
+                        JOptionPane.showMessageDialog(null, "Deposited funds successfully");
+                        handleOnComplete();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Our service is currently unavailable please try again later");
+                        handleOnComplete();
+                    }
+                }
             }
         });
 
@@ -96,5 +108,12 @@ public class DepositeFunds extends JFrame implements ActionListener {
         }else if (e.getSource() == a0Button) {
             textField1.setText(textField1.getText() + "0");
         }
+    }
+
+    private void handleOnComplete() {
+        LoginForm loginForm = new LoginForm();
+        loginForm.setVisible(true);
+        loginForm.setLocationRelativeTo(null);
+        dispose();
     }
 }
