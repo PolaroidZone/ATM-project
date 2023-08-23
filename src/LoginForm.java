@@ -1,3 +1,4 @@
+import AtmLogic.Account;
 import AtmLogic.AtmSession;
 
 import javax.swing.*;
@@ -14,7 +15,6 @@ public class LoginForm extends JFrame implements ActionListener {
     private JButton proceedButton;
     private JButton End;
     private JButton newUserButton;
-
     AtmSession atmSession = new AtmSession();
 
     public LoginForm (){
@@ -25,6 +25,7 @@ public class LoginForm extends JFrame implements ActionListener {
         setResizable(true);
         /* increase the dimensions */
         setSize(500,500);
+        setLocationRelativeTo(null);
 
         proceedButton.addActionListener(this);
         End.addActionListener(this);
@@ -56,21 +57,22 @@ public class LoginForm extends JFrame implements ActionListener {
         }
     }
 
-    private void login(String cardNumber, String pinNumber) {
-        //Check if the user is a database user
-        //Get database connection
+    private void login(String accountNumber, String pinNumber) {
         //Check if the user exists
-        boolean isExists = atmSession.login(cardNumber, Integer.parseInt(pinNumber));
+        try {
+            boolean isExists = atmSession.login(accountNumber, Integer.parseInt(pinNumber));
 
-        if (!isExists){
+            if (!isExists){
+                JOptionPane.showMessageDialog(null, "Invalid card number or pin");
+            }else{
+                //Open the next window
+                new TransactionForm(accountNumber);
+                dispose();
+            }
+        } catch (NumberFormatException e){
             JOptionPane.showMessageDialog(null, "Invalid card number or pin");
-        }else{
-            //Open the next window
-            new TransactionForm(cardNumber, pinNumber);
-            dispose();
         }
 
     }
-
 
 }

@@ -48,16 +48,21 @@ public class CreateUser extends JFrame implements ActionListener {
             } else {
                 //call the login method
                 getConnection();
-                boolean userCreated = createUser(Integer.parseInt(accountNumber), Integer.parseInt(accountPin));
-                if (userCreated) {
-                    JOptionPane.showMessageDialog(null, "Account created successfully.");
-                    LoginForm loginForm = new LoginForm();
-                    loginForm.setVisible(true);
-                    loginForm.setLocationRelativeTo(null);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to create account.");
+                try {
+                    boolean userCreated = createUser(Integer.parseInt(accountNumber), Integer.parseInt(accountPin));
+                    if (userCreated) {
+                        JOptionPane.showMessageDialog(null, "Account created successfully.");
+                        LoginForm loginForm = new LoginForm();
+                        loginForm.setVisible(true);
+                        loginForm.setLocationRelativeTo(null);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to create account.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid account number and pin");
                 }
+
             }
         } else if (e.getSource() == cancelButton) {
             System.exit(0);

@@ -2,29 +2,47 @@ package AtmLogic;
 
 import JDBCon.DatabaseConnector;
 
+import static AccountGenerator.UniqueNumberGenerator.generateUniqueCard;
+import static JDBCon.DatabaseConnector.*;
+
 public class Deposit {
-    protected Account account;
     protected AtmSession session;
-    public Deposit(Account account) {
-        this.account = account;
+    public Deposit() {
     }
 
-    public String depositFunds(double amount) {
+    public boolean depositFunds(String accountId, double amount) {
         // TODO: Implement logic to deposit funds into the account
         // For example, update the account balance with the deposited amount
-        Account currentAccount = session.getCurrentAccount();
+        getConnection();
 
-        if (DatabaseConnector.getConnection() == null){
-            System.out.println("There is no database connection available");
-            return "This service is currently unavailable please try again later";
-        }else {
-            String accountId  = currentAccount.getUserId();
-            if (DatabaseConnector.depositFunds(Integer.parseInt(accountId), amount)){
-                System.out.println("Successfully deposited funds: " + amount);
-                return "Successfully deposited funds: " + amount;
+        boolean isAvailable = checkBankAccount(Integer.parseInt(accountId));
+
+        if(!isAvailable){
+            int cardNumber = generateUniqueCard();
+            boolean isCreated = DatabaseConnector.createBankAccount(cardNumber, Integer.parseInt(accountId), amount);
+            if (isCreated) {
+                System.out.println("Successfully created bank account");
+                closeConnection();
+                return true;
+            } else {
+                System.out.println("Error creating bank account");
+                closeConnection();
+                return false;
+            }
+        } else {
+            if (getConnection() == null){
+                System.out.println("There is no database connection available");
+                return false;
             }else {
-                System.out.println("Error depositing funds");
-                return "Cant deposit funds at the moment try again later";
+                if (DatabaseConnector.depositFunds(Integer.parseInt(accountId), amount)){
+                    System.out.println("Successfully deposited funds: " + amount);
+                    closeConnection();
+                    return true;
+                }else {
+                    System.out.println("Error depositing funds");
+                    closeConnection();
+                    return false;
+                }
             }
         }
     }
