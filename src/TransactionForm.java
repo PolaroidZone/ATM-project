@@ -39,7 +39,6 @@ public class TransactionForm extends JFrame implements ActionListener {
         printBankStatementButton.addActionListener(this);
         changePinButton.addActionListener(this);
         cancelButton.addActionListener(this);
-
     }
 
     @Override
@@ -47,8 +46,10 @@ public class TransactionForm extends JFrame implements ActionListener {
         String uid = account.getUserId();
         if (e.getSource() == withdrawFundsButton){
             new WithdrawFunds(uid);
+            dispose();
         }else if (e.getSource() == depositeFundsButton){
             new DepositeFunds(uid);
+            dispose();
         } else if (e.getSource() == checkBalanceButton) {
 
         } else if (e.getSource() == printBankStatementButton) {
