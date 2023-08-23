@@ -1,3 +1,4 @@
+import AccountGenerator.UniqueNumberGenerator;
 import AtmLogic.Account;
 import AtmLogic.AtmSession;
 import AtmLogic.GetStatement;
@@ -7,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static AccountGenerator.UniqueNumberGenerator.convertScientificToDecimal;
 import static JDBCon.DatabaseConnector.withdrawFunds;
 
 public class WithdrawFunds extends JFrame implements ActionListener {
@@ -147,7 +149,7 @@ public class WithdrawFunds extends JFrame implements ActionListener {
     }
 
     private void handleWithdraw(int account, double amount) {
-        double balance = GetStatement.getStatement(String.valueOf(account));
+        double balance = GetStatement.getAccountBalance(String.valueOf(account));
         if (amount > balance) {
             JOptionPane.showMessageDialog(this, "Insufficient funds");
         } else {
@@ -163,21 +165,9 @@ public class WithdrawFunds extends JFrame implements ActionListener {
     }
 
     protected void getBalance(String accountNumber) {
-        double balance = GetStatement.getStatement(accountNumber);
+        double balance = GetStatement.getAccountBalance(accountNumber);
         String finalBalance = convertScientificToDecimal(balance);
         balamce.setText(finalBalance);
-    }
-    public static String convertScientificToDecimal(double scientificNumber) {
-        // Convert the scientific notation to a full decimal string
-        String decimalString = String.format("%.10f", scientificNumber);
-
-        // Remove trailing zeros
-        decimalString = decimalString.replaceAll("0*$", "");
-
-        // Remove decimal point if there are no decimal places left
-        decimalString = decimalString.replaceAll("\\.$", "");
-
-        return decimalString;
     }
 
     private void handleOnComplete() {

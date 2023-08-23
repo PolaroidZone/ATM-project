@@ -40,8 +40,18 @@ public class UniqueNumberGenerator {
         return uniqueNumber;
     }
 
-//    public static void main(String[] args) {
-//        int uniqueNumber = generateUniqueNumber();
-//        System.out.println("Generated unique number: " + uniqueNumber);
-//    }
+
+    public static String convertScientificToDecimal(double scientificNumber) {
+        // Convert the scientific notation to a full decimal string
+        String decimalString = String.format("%.10f", scientificNumber);
+
+        // Remove trailing zeros
+        decimalString = decimalString.replaceAll("0*$", "");
+
+        // Remove decimal point if there are no decimal places left
+        decimalString = decimalString.replaceAll("\\.$", "");
+
+        return decimalString;
+    }
+
 }
