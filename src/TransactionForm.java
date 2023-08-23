@@ -16,7 +16,6 @@ public class TransactionForm extends JFrame implements ActionListener {
     private JPanel Navigato_message;
     private JButton withdrawFundsButton;
     private JButton depositeFundsButton;
-    private JButton checkBalanceButton;
     private JButton printBankStatementButton;
     private JButton changePinButton;
     private JButton cancelButton;
@@ -27,15 +26,14 @@ public class TransactionForm extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(true);
-        setLocationRelativeTo(null);
         /* increase the dimensions */
         setSize(500,500);
+        setLocationRelativeTo(null);
 
         account.setUserId(accountNumber);
 
         withdrawFundsButton.addActionListener(this);
         depositeFundsButton.addActionListener(this);
-        checkBalanceButton.addActionListener(this);
         printBankStatementButton.addActionListener(this);
         changePinButton.addActionListener(this);
         cancelButton.addActionListener(this);
@@ -50,10 +48,9 @@ public class TransactionForm extends JFrame implements ActionListener {
         }else if (e.getSource() == depositeFundsButton){
             new DepositeFunds(uid);
             dispose();
-        } else if (e.getSource() == checkBalanceButton) {
-
         } else if (e.getSource() == printBankStatementButton) {
-
+            new BankStatement(uid);
+            dispose();
         } else if (e.getSource() == changePinButton) {
 
         } else if (e.getSource() == cancelButton) {
