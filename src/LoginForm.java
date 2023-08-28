@@ -30,6 +30,7 @@ public class LoginForm extends JFrame implements ActionListener {
         proceedButton.addActionListener(this);
         End.addActionListener(this);
         newUserButton.addActionListener(this);
+        newUserButton.setVisible(false);
 
     }
 
